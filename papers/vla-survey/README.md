@@ -10,7 +10,6 @@
 - Project:
 
 ---
-
 ## Chapter 0. Abstract
 
 ### Overview
@@ -185,6 +184,7 @@
 - 따라서 앞으로 VLA 연구에서는 Model뿐 아니라
   Dataset + Benchmark + Data Engine을 함께 보는 것이 중요하다.
 
+---
 # Chapter 2. Preliminaries
 
 ### Key Concepts
@@ -285,18 +285,28 @@ Data Engines
 - Data Engine은 한번 만들어 놓는 Dataset과 달리
   지속적으로 robot data를 생성·변환·확장하는 시스템이라는 점이 핵심.
 
+---
 # Chapter 3. VLA Datasets
 
 ### Key Concepts
 
-- Datasets
+- VLA Dataset
   - 
-  - Real-world datasets
-  - Synthetic datasets
-
-analyze differences in embodiment diversity, action representation, and modalities
+  VLA model의 training material로 사용됨\
+  embodiment, environment generalization에 직접적인 영향을 줌.
 
 ### Taxonomy
+
+- Data Source
+  - 
+  - Real-World Datasets
+  - Synthetic Datasets
+
+- Comparison Axes
+  - 
+  - Embodiment Diversity
+  - Action Representation
+  - Modalities
 
 ### Strengths / Pros
 
@@ -304,7 +314,11 @@ analyze differences in embodiment diversity, action representation, and modaliti
 
 ### Trade-offs
 
+- Fidelity ↔ Cost / Scalability
+
 ### Key Findings
+
+- Dataset choice는 원하는 generalization objective와 deployment setting에 따라 달라져야 함.
 
 ### Important Models / Datasets / Methods
 
@@ -312,7 +326,9 @@ analyze differences in embodiment diversity, action representation, and modaliti
 
 ### My Takeaway
 
+- VLA dataset은 단순히 데이터 양이 아니라 어떤 robot / modality / action space를 포함하는지가 중요함.
 
+---
 # Chapter 3.1 Real-World Datasets
 
 ### Key Concepts
@@ -323,13 +339,38 @@ analyze differences in embodiment diversity, action representation, and modaliti
 
 ### Strengths / Pros
 
+- 실제 contact dynamics와 friction을 반영
+- Real image / authentic robot state / action 제공
+- Simulation에서 재현하기 어려운 physically grounded signal 포함
+- 높은 physical fidelity
+
 ### Limitations / Cons
 
-- difficult to scale due to substantial human labor requirments and infrastructure expenses
+- Human labor와 physical infrastructure가 필요하여 collection cost가 높음
+- Large-scale collection이 어려움
+- 특정 robot / task / environment에 coverage가 제한될 수 있음
 
 ### Trade-offs
 
+- High Fidelity ↔ High Cost
+- Data Quality ↔ Scalability
+
 ### Key Findings
+
+- Cross-embodiment pretraining / large-scale transfer
+  → Open X-Embodiment
+
+- Specific robot fine-tuning
+  → RT-1 / DROID / BridgeData V2
+
+- Environmental robustness
+  → DROID
+
+- Contact-rich manipulation
+  → RH20T
+
+- Semantic knowledge transfer
+  → RT-2 / Ego4D
 
 ### Important Models / Datasets / Methods
 
@@ -338,28 +379,483 @@ analyze differences in embodiment diversity, action representation, and modaliti
   most widely used pretraining datasets for VLA
 - RT-1 (Brohan et al., 2022)
   - 
-  emphasize data hygiene and consistency
+  - emphasize data hygiene and consistency
+  - single-embodiment datasets
 
 - BridgeData V2 (Walke dt al., 2023)
   - 
-  emphasize data hygiene and consistency
+  - emphasize data hygiene and consistency
+  - single-embodiment datasets
+
 
 - DROID (Khazatsky et al., 2024)
   - 
-  increases visual and environmental variation to enhance preceptual robustness under real-world conditions
+  - increases visual and environmental variation to enhance preceptual robustness under real-world conditions
+  - single-embodiment datasets
+  - robustness to environmental variation is reuqired, distributed real-world collections provide diverse lighting and scene configurations
+
 
 - RH20T (Fang et al., 2023)
   - 
-  multimodal datasets
-  
-  incorporate tactile/force and audio signals, which are particularly beneficial for contact-rich manipulation where vision alone may be insufficient
+  - multimodal datasets
+  - incorporate tactile/force and audio signals, which are particularly beneficial for contact-rich manipulation where vision alone may be insufficient
+  - contact-rich manipulation tasks
+  - offer additional tactile or force signals that complement vision
 
-- RT-2-style co-training (Brohan et al., 2023)
+- RT-2 (Brohan et al., 2023)
   - 
+  - web-co-trained or human-centric sources
+  - transferring semantic knowledge from large-scale human data is beneficial 
+
 
 - Ego4D (Grauman et al., 2022) 
   - 
-  human video corpora 
+  - human video corpora 
+  - web-co-trained or human-centric sources
+
+
 ### Future Work / Open Challenges
+
+- Low-cost acquisition of high-quality real-world data
+- Real-world data collection의 scalability 향상
+
+### My Takeaway
+
+- Real-world data는 physical fidelity가 높지만 수집 비용 때문에 scale 확보가 어렵다.
+- 따라서 deployment 대상 robot과 generalization 목표에 따라 dataset을 선택해야 한다.
+
+# Chapter 3.2 Synthetic Datasets
+
+### Key Concepts
+
+- synthetic data is significantly more scalable and cost-effective, it often exhibits lower realism compared to real-world datasets
+- common strategy for synthetic data generation is procedural randomization within simulation environments
+- synthetic data is frequently used to bootstrap policies before subsequent calibration with real-world data
+- synthetic data is typically used for large-scale pretraining or augmentation. with real-world data required for final calibration and deployment
+
+### Taxonomy
+
+- Procedural Randomization
+  - SynGrasp-1B / GraspVLA
+
+- Simulation Environment / Rollout
+  - RoboCasa
+
+- Automated Task Generation
+  - RoboGen
+
+- Demonstration Augmentation
+  - MimicGen
+
+### Strengths / Pros
+
+- Real-world data보다 scalable하고 cost-effective
+- Trajectory 수를 쉽게 증가시킬 수 있음
+- Scene configuration을 다양하게 변경 가능
+- Task success / failure를 simulator에서 자동 판정 가능
+- Human demonstration을 augmentation하여 dataset size를 확장 가능
+
+### Limitations / Cons
+
+- Rendering artifact로 인해 real image와 차이가 발생
+- Contact / friction 등의 physical dynamics 재현이 부정확할 수 있음
+- Simulator의 physical realism에 fidelity가 제한됨
+- Generated grasp pose / task가 physically implausible할 수 있음
+- Sim-to-Real gap 존재
+
+### Trade-offs
+
+- Scalability ↔ Fidelity
+- Low Cost ↔ Physical Realism
+
+### Key Findings
+
+- Synthetic data는 large-scale pretraining / augmentation에 적합
+- 그러나 final deployment를 위해서는 real-world calibration이 주로 필요
+- Synthetic data alone보다는
+  Synthetic Pretraining → Real-world Calibration 구조가 현실적
+
+### Important Models / Datasets / Methods
+
+- GraspVLA (Deng et al., 2025)
+  - 
+  large-scale synthetic grasp dataset SynGrasp1B
+  
+  SynGrasp1B 
+  - 
+  - Billion-scale synthetic robotic grasping dataset
+  - 10,000+ objects / 240 categories
+  - Simulation에서 grasp poses와 trajectories를 자동 생성
+  - Extensive domain randomization 사용
+  - 장점: 매우 scalable하고 real-world collection cost가 없음
+  - 핵심 문제: Sim-to-Real / physical realism
+
+- RoboCasa (Nasiriany et al., 2024)
+  - 
+  - Simulator-based household manipulation environment
+  - Diverse kitchen environments
+  - Asset libraries
+  - Structured task suites
+  - Large-scale synthetic rollout / demonstration collection 
+
+- RoboGen (Wang et al., 2024c)
+  - 
+  - LLM으로 task proposal
+  - Simulation code 자동 생성
+  - Manual task authoring 감소
+  - Task diversity 확장
+
+- MimicGen (Mandlekar et al., 2023)
+  - 
+  - further scale simulator data 
+  - preturbing object poses and initial condition from a small set of human seed demonstrations
+  - increasing dataset size while preserving underlying task structure
+  - augmentation method
+  - scale limited human demonstrations within simulation by perturbing object configurations and initial conditions
+
+- VLA finetuning datasets
+    - 
+    - LIBERO (Liu et al.2023)
+    - CALVIN (Meeset al., 2022)
+    - Meta-World (Yu et al., 2021)
+    - RLBench (James et al., 2020)
+    - BEHAVIOR-1K (Li et al., 2024a)
+    - VLABench (Zhang et al., 2024b) 
+
+
+
+### Future Work / Open Challenges
+
+- Improve physical realism of simulation
+- Reduce Sim-to-Real gap
+- Generate more physically plausible trajectories / grasp poses
+- Better validation and filtering of automatically generated data
+
+### My Takeaway
+
+- Synthetic data는 대규모 VLA pretraining을 가능하게 하지만
+  physical realism과 Sim-to-Real 문제가 핵심 한계다.
+- 따라서 synthetic data로 scale을 확보하고,
+  real-world data로 최종 calibration하는 전략이 중요하다.
+
+
+---
+
+# Chapter 4. VLA Benchmarks
+
+### Key Concepts
+
+- VLA Benchmark
+  - VLA model의 performance와 generalization ability를 평가하기 위한 evaluation dataset
+  - representative tasks + well-defined evaluation metrics로 구성
+
+- Two Analytical Dimensions
+  - Task Complexity
+    - manipulation objective의 compositional / temporal difficulty
+  - Environment Structure
+    - scene diversity / spatial variability
+
+- Benchmark는 evaluation protocol뿐 아니라
+  training/testing split을 가진 structured data resource로도 사용될 수 있음
+
+### Taxonomy
+
+- Task Complexity
+  - Simple / Short-horizon
+  - Complex / Long-horizon compositional
+
+- Environment Structure
+  - Table-top
+  - Multi-scene
+
+### Strengths / Pros
+
+- standardized comparison 가능
+- 어떤 VLA capability를 benchmark가 강조하는지 체계적으로 비교 가능
+- controlled train/test split을 통해 learning / transfer ability 평가 가능
+
+### Limitations / Cons
+
+- Real-robot evaluation은 costly하고 operationally complex
+- Task complexity와 environment structure가 동시에 변하는 경우가 많음
+- Perception / language grounding / control이 tightly coupled되어
+  failure attribution이 어려움
+
+### Trade-offs
+
+- Controlled / Simple Environment
+  ↔ Realistic / Diverse Environment
+
+- Evaluation Interpretability
+  ↔ Task & Environment Complexity
+
+### Key Findings
+
+- VLA benchmark difficulty는 task complexity와
+  environment structure를 함께 고려해야 함
+- 두 요소가 동시에 변하면 multiple difficulty sources가 entangled됨
+- True generalization이 어렵기 때문에 많은 benchmark가
+  explicit training / testing split을 제공
+
+### Important Models / Datasets / Methods
+
+- LIBERO (Liu et al., 2023)
+- Meta-World (Yu et al., 2021)
+
+simulator-based suites 
+
+### Future Work / Open Challenges
+
+### My Takeaway
+
+---
+# Chapter 4.1 Table-top Benchmarks
+
+### Key Concepts
+
+- evaluate VLA models under constrained table-top tasks
+
+- most common tasks that are clean enough
+
+- simple short-horizon tasks
+  - 
+  include benchmarks that focus on atomic manipulation tasks executed within short action horizons under constrained table-top environments
+
+  - Meta-World (Yu et al., 2021)
+    - 
+    comprises 50 simple manipulation tasks\
+    simplify visual perception and scene understanding
+
+  - LIBERO (Liu et al., 2023)
+    - 
+    most tasks correspind to atomic skills \
+    completed within limited steps \
+    - LIBERO-plus (Fei et al., 2026)
+    - LIBERO-PRO (Zhou et al., 2025)
+    - LIBERO-X (Wang et al., 2026)
+
+  - SimplerEnv (Lu et al., 2024b)
+    - 
+    evaluates policies on short-horizon table-top manupulation tasks \
+    deliberately maintains environments that are only sufficiently realistic to preserve sim-to-real ranking consistency
+
+  - RoboChallenge (Yakefu et al., 2025) 
+    - 
+    - provide a real-world table-top robotic platform
+    
+- complex long-horizon tasks
+  - 
+  generating compositional tasks while maintaining a simplified interaction setting
+
+  - CALVIN (Mees et al., 2022)
+    - 
+    reuqiting agents to execute extended sequences of unconstrained language instructions across multiple tabletop environments\
+    most challenging protocol requiring zero-shot generalization to an unseen environment\
+    isolating sustained grounding and temporal credit assignment as primary challenges
+
+  - GemBench (Garcia et al., 2025)
+    -
+    systematically assessing hierarchicl generalization across novel objet placements, unseen instances, and compositional long-hosizon tasks within the RLBench simulator 
+
+  - COLOSEUM (Pumacay et al., 2024)
+    - 
+    evaluates robustness under controlled table-top settings by introducing systematic visual and physical perturbations across 14 axes\
+    demonstrating significant degradation when multiple perturbation factors are applied simultaneously
+
+  emphasize reasoning difficulty, compositional grounding, and robustness under controlled environmental conditions rathe than expanding environment scale or visual diversity
+
+### Taxonomy
+
+- Simple Short-horizon
+  - Meta-World
+  - LIBERO
+  - SimplerEnv
+  - RoboChallenge
+
+- Complex Long-horizon / Compositional
+  - CALVIN
+  - GemBench
+  - COLOSSEUM
+
+### Strengths / Pros
+
+- 환경이 constrained되어 evaluation reproducibility가 높음
+- Real-world에서도 비교적 reproduction이 쉬움
+- Immediate action correctness와 low-level control stability 평가에 적합
+- 환경 변수를 제한하여 reasoning / grounding 문제를 더 분리해서 관찰 가능
+
+### Limitations / Cons
+
+- Simple benchmark는 long-horizon reasoning을 충분히 stress하지 못함
+- Complex environmental variation이 제한적
+- 실제 open-world environment를 완전히 반영하지 못함
+
+### Trade-offs
+
+- Simplicity / Reproducibility
+  ↔ Environmental Realism / Diversity
+
+### Key Findings
+
+- Short-horizon 성능이 좋아도 long-horizon task에서는 성능이 크게 저하될 수 있음
+- Instruction chain이 길어질수록 sustained grounding과 temporal reasoning이 어려워짐
+- Multiple perturbation이 동시에 적용되면 robustness가 크게 감소
+
+### Important Models / Datasets / Methods
+
+### Future Work / Open Challenges
+
+### My Takeaway
+
+---
+
+# Chapter 4.2 Multi-scene Benchmarks
+
+### Key Concepts
+
+- aim to evaluate embodied angents under substantially more complex task and environment conditions
+
+- emphasize interaction across diverse scenes, long-horizon execution, and compositional reasoning, reflecting a shift toward more realistic and semantically rich embodied tasks
+
+- BEHAVIOR-1K (Li et al., 2024a)
+  - 
+  evaluates everyday human activities that unfold over long durations and require coordination of multiple manipulation skills\
+  spans full-room and multi-room environments and supports realistic physical interactions involving rigid objects, deformable materials, and fluids
+
+- VLABench (Zhang et al., 2024b)
+  - 
+  increases task complexity by constructing composite language-conditioned tasks that intergrate multiple skills with long-horizion multi-step reasoning and intermediate reasoning grounded inscene semantics
+
+- Open X-Embodiment (O'Neill et al., 2025)
+  - 
+  adopts a complementary scale-driven perspective by aggeragting data from heterogeneous real-world robots and environments, emphasizing behaviroal breadth and cross-embodiment transfer\
+  rather than enforcing a unified task structure or explictly designed long-horizion objectives
+
+difficulty arises from the joing expansion of task horizon and environmental varibaility, stressing compositional reasoning, robustness, and generalization across scencs and embodiments
+
+### Taxonomy
+
+- Long-horizon Everyday Activities
+  - BEHAVIOR-1K
+
+- Compositional Language-conditioned Tasks
+  - VLABench
+
+- Scale / Cross-Embodiment Generalization
+  - Open X-Embodiment
+
+### Strengths / Pros
+
+- Diverse scenes와 realistic interaction 평가 가능
+- Long-horizon execution 평가 가능
+- Compositional reasoning과 semantic grounding 평가 가능
+- Cross-scene / cross-embodiment generalization 평가에 유리
+
+### Limitations / Cons
+
+- Task horizon과 environment variability가 동시에 증가하여
+  failure attribution이 더 어려움
+- Evaluation complexity와 computational / operational cost가 증가
+- 서로 다른 benchmark 간 difficulty를 직접 비교하기 어려울 수 있음
+
+### Trade-offs
+
+- Realism / Diversity
+  ↔ Interpretability / Controlled Evaluation
+
+### Key Findings
+
+- Multi-scene benchmark의 difficulty는
+  task horizon + environmental variability의 동시 증가에서 발생
+- VLA가 compositional reasoning, robustness,
+  cross-scene / cross-embodiment generalization을 동시에 요구받음
+
+### Important Models / Datasets / Methods
+
+### Future Work / Open Challenges
+
+- Long-horizon compositional reasoning 평가 개선
+- Scene / embodiment variation에 대한 robust generalization
+- 복잡한 benchmark에서도 failure source를 분리할 수 있는 evaluation design
+
+### My Takeaway
+
+- Multi-scene benchmark는 실제 환경과 더 가까운 VLA 능력을 평가할 수 있지만,
+  task complexity와 environment variability가 동시에 증가해
+  실패 원인 분석이 어려워진다.
+
+---
+
+# Chapter 5. VLA Data Engines
+
+### Key Concepts
+
+- VLA data engine
+  - 
+  scalable system or pipeline designed to continuously generate, transform, or augment training data for VLA model
+
+### Taxonomy
+
+- 
+
+### Strengths / Pros
+
+- 
+
+### Limitations / Cons
+
+- 
+
+### Trade-offs
+
+- 
+
+### Key Findings
+
+- 
+
+### Important Models / Datasets / Methods
+
+### Future Work / Open Challenges
+
+- 
+
+### My Takeaway
+
+---
+
+# Chapter 
+
+### Overview
+
+- 
+
+### Key Concepts
+
+### Taxonomy
+
+- 
+
+### Strengths / Pros
+
+- 
+
+### Limitations / Cons
+
+- 
+
+### Trade-offs
+
+- 
+
+### Key Findings
+
+- 
+
+### Important Models / Datasets / Methods
+
+### Future Work / Open Challenges
+
+- 
 
 ### My Takeaway
