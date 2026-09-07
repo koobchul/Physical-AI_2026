@@ -103,7 +103,6 @@ Simulation에서 학습하거나 생성한 knowledge / policy를 real-world robo
 Language, vision, predicted states, actions를 실제 physical object / state / robot behavior와 올바르게 연결하는 것.
 
 ---
-
 ## 4. Taxonomy / Method
 
 이 논문의 전체 구조는 세 가지 data infrastructure component로 정리된다.
@@ -270,8 +269,6 @@ Generative Data Engine
 
 Dataset, Benchmark, Data Engine의 역할은 실제 연구에서는 완전히 분리되지 않는다.
 
-예:
-
 - LIBERO, CALVIN, Meta-World 등은 benchmark이면서 training data로도 사용
 - MimicGen은 synthetic dataset 생성 방식이면서 data engine 역할도 수행
 
@@ -296,21 +293,21 @@ Data Engine
 
 ```text
 Real-World Data
-High Fidelity
-↕
-High Cost / Limited Scale
+  High Fidelity
+        ↕
+  High Cost / Limited Scale
 
 Synthetic Data
-High Scalability
-↕
-Lower Physical Realism
+  High Scalability
+        ↕
+  Lower Physical Realism
 ```
 
 ### Cross-Embodiment Data
 
 ```text
 Embodiment Diversity
-↕
+        ↕
 Interface Consistency
 ```
 
@@ -318,7 +315,7 @@ Interface Consistency
 
 ```text
 Controlled / Reproducible
-↕
+          ↕
 Realistic / Diverse
 ```
 
@@ -326,7 +323,7 @@ Realistic / Diverse
 
 ```text
 Precision
-↕
+    ↕
 Scalability
 ```
 
@@ -334,7 +331,7 @@ Scalability
 
 ```text
 Generation Scale
-↕
+        ↕
 Grounding Reliability
 ```
 
