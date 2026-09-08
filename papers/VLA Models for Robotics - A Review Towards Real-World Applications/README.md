@@ -22,58 +22,63 @@
 
 ### Problem
 
-- effective for a limited set of predefined tasks, such systems typically rely on selectiong from fixed motion primitives or on policies learned through imitation learning
-- which limites their ability to generalise to a broader range of tasks
+- Earlier robotic systems decouple LLMs/VLMs from low-level robot policies.
+- They often rely on fixed motion primitives or task-specific imitation policies, limiting generalization to unseen tasks.
 
 ### Motivation
 
-- Learning policies that can generalise from current observations and instructions to unseen tasks remains a significant challenge 
+- VLA models aim to directly connect vision and language understanding with robot actions.
+- However, VLA architectures and training methods are still not standardized, making the field difficult to understand systematically.
+- ongoing research into efficient model architetures and distillation methods that can reduce resource requirements without significantly degarding performance
 
 ### Main Contribution
 
-- 
+- Provides a comprehensive full-stack review of VLA systems.
+- Covers not only architectures and learning strategies, but also robot platforms, data collection, datasets, augmentation, evaluation, and real-world deployment.
+- Provides practical recommendations for applying VLA models to real robotic systems.
 
 ---
 
 ## 3. Key Concepts
 
-- Provide a systematic review of VLA
-    - strategy and architectiral transition
-    - architectures and building blocks
-    - modality-specific processing techniques
-    - learning paradigms
+- VLA:
+  - takes visual observations and natural language instructions as core inputs
+  - directly generates robot control commands
+  - may additionally incorporate proprioception, depth, tactile, audio, etc.
 
-- focused primarily on either action tokenization or general architectural advancements
-  - comprehensive full-stack overview
-  - covering both software and hardware components
+- Generalist robot policy:
+  - aims to generalize across tasks, objects, embodiments, and environments
 
-- includes
-    - robot platforms
-    - data collection strategies
-    - publicy available datasets
-    - data augmentation techniques
-    - evaluation benchmarks
-
-- define VLA models as systems that take visual observations and natrual language instructions as core inputs andproduce robot actions by directly generating control commands
+- Full-stack view of VLA:
+  - Architecture / Modality / Training
+  - Data collection / Dataset / Augmentation
+  - Robot platform / Evaluation / Real-world application
 
 ---
 
 ## 4. Taxonomy / Method
 
--
+- Challenges
+- Design Strategy & Architectural Transition
+- Architecture & Data Modality
+- Training Strategy
+- Data Collection / Dataset / Augmentation
+- Robot / Evaluation / Application
+- Recommendations for Practitioners
 
 ---
 
 ## 5. Important Models / Datasets / Methods
 
--
-
+| Models | Main Focus |
+|---|---|
+|
 ---
 
 ## 6. Strengths
 
-- jointly learning visual, linguistic, and action modalities in an end-to-end framework, VLAs aim to enable robots to perform a wider range of tasks
-
+- Full-stack perspective covering both software and hardware aspects of VLA systems.
+- Strong emphasis on practical real-world deployment.
 ---
 
 ## 7. Limitations
@@ -84,19 +89,19 @@
 
 ## 8. Trade-offs
 
--
+- imposing critical design trade0offs in model architecture, training strategy, and deployment feasibility
 
 ---
 
 ## 9. Key Findings
 
--
+- most recent generation of VLAs adopts hierarchical policies to bridge high level language understanding with low-level motor extcution 
 
 ---
 
 ## 10. Future Work / Open Challenges
 
--
+- 
 
 ---
 
