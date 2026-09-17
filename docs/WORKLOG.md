@@ -10,6 +10,9 @@ Detailed daily logs are stored in [`worklog/`](./worklog/).
 
 ### 2026-09
 
+- [2026-09-18](./worklog/2026-09/2026-09-18.md)
+  - TODO
+
 - [2026-09-17](./worklog/2026-09/2026-09-17.md)
   - VR rendering diagnostics
   - HMD / stereo transformation tests
