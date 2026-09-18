@@ -9,6 +9,11 @@
  이를 실행했을 때 세로로 길쭉한게 사라지고 정상 비율이 된다면 그것이 범인일 가능성이 높음.
  안 되면 반대 방향도 해보기
  python case_1_width_scale.py --width-scale 2.0
+ 2.0 looks wider
+ 
+ 20.0 looked even better
+
+
 --------------------------------------------
 
 변하는지 기록할 것
@@ -16,6 +21,11 @@
 ---------------------------------------------
  이어서 frustrum_width 조정
  python case_1_width_scale.py --fov-scale-x 0.5
+ looks big and expanded(distance is distorted shorter)
  python case_1_width_scale.py --fov-scale-x 2.0
+ (distance distorted longer)
+
  만약 위에선 변화했는데 아래 코드에선 변화가 없었다면 MuJoCo가 frustrum을 무시하고 종횡비로만 결정한다 - 화각을 뷰포트 크기로 제어하면 됨
  만약 아래에서만 변화한다면 값만 고치면 됨(쉬움)
+
+ 32 makes vertically longer
