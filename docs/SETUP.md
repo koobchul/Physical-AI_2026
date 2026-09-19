@@ -1,113 +1,134 @@
 # Setup Guide
 
-Environment setup guide for the Physical-AI_2026 project.
+Environment setup guide for the `Physical-AI_2026` project.
 
-This document records the configuration required to reproduce the VR teleoperation, simulation, and robot control environment.
+This document describes the hardware, software, and development environment used for VR teleoperation, robot simulation, and real-world robot control.
+
+For detailed robot operation and safety notes, see [Robot Vendor Notes](ROBOT_VENDOR_NOTES.md).
 
 ---
 
 ## 1. System Information
 
-Fill this section for each machine when necessary.
-
 ### Robot Lab Workstation
 
-- OS:
-- CPU:
-- GPU:
-- RAM:
-- Python:
-- CUDA:
-- Conda Environment:
+| Component | Configuration |
+|---|---|
+| OS | Ubuntu 22.04 |
+| CPU | Intel Xeon Gold (32 cores / 64 threads) |
+| GPU | NVIDIA RTX PRO 5000 Blackwell (48 GB) |
+| RAM | 256 GB |
+| Python | To be confirmed |
+| CUDA | To be confirmed |
+| Conda Environment | To be confirmed |
+| ROS2 | Humble (installed) |
 
 ### Other Development Machines
 
-- OS:
-- Python:
-- Conda Environment:
+Development is also conducted on separate computers at Optim. Lab and MLAlab.
+
+Record the Python environment, installed packages, and machine-specific configurations when necessary.
 
 ---
 
 ## 2. Hardware
 
-### Robot
+### Robots
 
-- UFACTORY xArm7
+- UFACTORY xArm7 × 2
 - UFACTORY Gripper
-- INSPIRE RH56E2
+- INSPIRE RH56E2 robotic hand
 
 ### VR
 
 - Meta Quest 2
 
+### Current Hardware Status
+
+| Component | Status |
+|---|---|
+| xArm7 (Left) | Connected; basic operation verified |
+| xArm7 (Right) | Connected; basic operation verified |
+| Robotic Hand | Connected; basic operation verified |
+| Dual-Arm Coordination | Further validation required |
+| VR-to-Real-Robot Control | Further validation required |
+
+Basic operation verification does not imply that coordinated dual-arm motion or VR-based real-robot control has been validated.
+
 ---
 
 ## 3. Software Stack
 
-Main software:
+### VR & Simulation
 
 - Python
-- PyTorch
 - MuJoCo
 - robosuite
 - SteamVR
 - ALVR
 - OpenVR
+- PyOpenGL
+- GLFW
+
+### Robot Control & Learning
+
+- ROS2 Humble
+- UFACTORY Studio
+- UFACTORY xArm Python SDK
+- PyTorch
+
+Installed package versions and working configurations should be recorded for each development machine.
 
 ---
 
-## 4. Python Environment
-
-Check Python:
-
-~~~bash
-python --version
-~~~
-
-Example Conda environment:
-
-~~~bash
-conda create -n physical_ai python=3.10
-conda activate physical_ai
-~~~
-
-Check active environment:
-
-~~~bash
-conda env list
-~~~
-
----
-
-## 5. Repository Setup
+## 4. Repository Setup
 
 Clone the repository:
 
-~~~bash
+```bash
 git clone https://github.com/koobchul/Physical-AI_2026.git
-~~~
+```
 
 Move into the repository:
 
-~~~bash
+```bash
 cd Physical-AI_2026
-~~~
+```
 
 Before starting work:
 
-~~~bash
+```bash
+git status
 git pull
-~~~
+```
+
+---
+
+## 5. Python Environment
+
+Check the Python version:
+
+```bash
+python --version
+```
+
+Check the available Conda environments:
+
+```bash
+conda env list
+```
+
+Activate the existing project environment before running the application.
+
+Record the verified environment name and dependency versions after confirming the working configuration.
 
 ---
 
 ## 6. VR Environment
 
-### Quest 2
+### Connection Pipeline
 
-Target connection flow:
-
-~~~text
+```text
 Meta Quest 2
      ↓
 ALVR
@@ -117,327 +138,179 @@ SteamVR
 OpenVR
      ↓
 Python Application
-~~~
+     ↓
+MuJoCo / robosuite
+```
+
+### Connection Checklist
+
+- [ ] Quest 2 connected through ALVR
+- [ ] SteamVR running
+- [ ] HMD tracking confirmed
+- [ ] Left controller detected
+- [ ] Right controller detected
+- [ ] Stereo rendering confirmed
+
+### OpenVR Check
+
+```bash
+python -c "import openvr; print('OpenVR OK')"
+```
+
+For detailed installation instructions and troubleshooting, refer to the verified configuration of the robot lab workstation.
 
 ---
 
-## 7. SteamVR
+## 7. VR Teleoperation
 
-### Installation
+### Main Implementation
 
-TODO
+```text
+code/vr_teleop/main_vr_scene.py
+```
+
+The current implementation integrates:
+
+- HMD tracking
+- Stereo rendering
+- Camera coordinate transformation
+- VR controller input
+- Robot control in simulation
+- Gripper control in simulation
 
 ### Execution
 
-TODO
+From the repository root:
 
-### Important Notes
+```bash
+cd code/vr_teleop
+```
 
-- Confirm that the headset is detected.
-- Confirm that HMD pose updates correctly.
-- Confirm that left and right controllers are detected.
-- Confirm that SteamVR tracking is active.
+Check the available command-line arguments:
 
----
+```bash
+python main_vr_scene.py --help
+```
 
-## 8. ALVR
+The final experimental configuration was reported as:
 
-### Installation
+```bash
+python main_vr_scene.py --fov-scale-x 0.5
+```
 
-TODO
+**Version verification required:** The previously shared script defines `--fov-scale` rather than `--fov-scale-x`.
 
-### Connection
+Confirm the exact script version and execution arguments used in the successful experiment before treating this command as the verified configuration.
 
-TODO
-
-### Important Configuration
-
-TODO
-
----
-
-## 9. OpenVR
-
-Check whether the Python OpenVR package is available:
-
-~~~bash
-python -c "import openvr; print('OpenVR OK')"
-~~~
-
-If necessary:
-
-~~~bash
-pip install openvr
-~~~
+See [VR Teleoperation README](../code/vr_teleop/README.md).
 
 ---
 
-## 10. Simulation
+## 8. Simulation
 
-### MuJoCo
+### Framework
 
-Installation:
+- MuJoCo
+- robosuite
 
-~~~text
-TODO
-~~~
+### Current Environment
 
-Test:
+The current VR implementation uses:
 
-~~~text
-TODO
-~~~
+- Environment: `Lift`
+- Robot: `XArm7`
+- Controller: `BASIC`
 
-### robosuite
+### Validation Checklist
 
-Installation:
-
-~~~text
-TODO
-~~~
-
-Test:
-
-~~~text
-TODO
-~~~
+- [ ] Simulation launches successfully
+- [ ] Robot model loads correctly
+- [ ] HMD tracking updates the virtual camera
+- [ ] VR controller input controls the simulated robot
+- [ ] Simulated gripper control verified
+- [ ] Robot workspace and control limits validated
 
 ---
 
-## 11. Robot Setup
+## 9. Real Robot Setup
 
 ### xArm7
 
-Connection procedure:
+The laboratory has two xArm7 robotic arms.
 
-~~~text
-TODO
-~~~
+Both robots have been connected, and basic operation has been verified.
 
-### Gripper
+Before developing the real-robot control pipeline:
 
-~~~text
-TODO
-~~~
+- Confirm the network connection of each robot.
+- Identify the correct robot before issuing commands.
+- Verify the initial robot poses.
+- Confirm payload and TCP settings.
+- Configure speed, workspace, and collision limits.
+- Verify emergency stop and recovery procedures.
 
-### INSPIRE RH56E2
+### Robotic Hand
 
-~~~text
-TODO
-~~~
+The robotic hand has been connected, and basic operation has been confirmed.
 
-Do not commit sensitive or machine-specific configuration such as:
+Before integrating it with the VR teleoperation pipeline:
 
-- Passwords
-- Tokens
+- Verify its communication interface.
+- Confirm the power and initialization procedure.
+- Confirm the available control commands.
+- Validate position and force feedback.
+- Establish safe operating limits.
+
+### Dual-Arm Control
+
+Coordinated dual-arm operation requires additional validation.
+
+- Confirm independent communication with both arms.
+- Verify the coordinate system of each robot.
+- Define safe operating regions.
+- Check potential arm-to-arm collisions.
+- Validate coordinated motion in simulation before real execution.
+
+For additional information, see [Robot Vendor Notes](ROBOT_VENDOR_NOTES.md).
+
+---
+
+## 10. Known Working Configuration
+
+Record the verified configuration after testing.
+
+| Item | Configuration |
+|---|---|
+| Workstation OS | Ubuntu 22.04 |
+| ROS2 | Humble |
+| VR Headset | Meta Quest 2 |
+| Robot | UFACTORY xArm7 × 2 |
+| Robotic Hand | INSPIRE RH56E2 |
+| Python | To be confirmed |
+| MuJoCo | To be confirmed |
+| robosuite | To be confirmed |
+| SteamVR | To be confirmed |
+| ALVR | To be confirmed |
+| Final VR Command | Version verification required |
+
+---
+
+## 11. Safety & Security
+
+Before real-robot experiments:
+
+- Verify the emergency stop and robot recovery procedures.
+- Confirm that the workspace is clear.
+- Use conservative speed and acceleration limits.
+- Validate the intended motion in simulation.
+- Confirm payload, TCP, and collision settings.
+- Keep personnel outside the robot operating area during automated motion.
+
+Do not commit:
+
+- Passwords or access tokens
 - Private credentials
-- Private network information
+- Sensitive network information
+- Machine-specific secrets
 
 ---
-
-## 12. VR Teleoperation
-
-Move to the implementation directory:
-
-~~~bash
-cd code/vr_teleop
-~~~
-
-Example execution:
-
-~~~bash
-python main_vr.py
-~~~
-
-Current pipeline:
-
-~~~text
-HMD / Controller
-       ↓
-OpenVR
-       ↓
-Pose Extraction
-       ↓
-Coordinate Transformation
-       ↓
-Robot / Simulation Command
-~~~
-
----
-
-## 13. Coordinate Systems
-
-When debugging VR-to-Robot control, verify:
-
-- VR world coordinate
-- HMD coordinate
-- Left-eye coordinate
-- Right-eye coordinate
-- Camera coordinate
-- Robot base coordinate
-- End-effector coordinate
-
-Record any conversion matrices or axis conventions here.
-
-### VR Coordinate Convention
-
-~~~text
-TODO
-~~~
-
-### Robot Coordinate Convention
-
-~~~text
-TODO
-~~~
-
-### VR → Robot Transformation
-
-~~~text
-TODO
-~~~
-
----
-
-## 14. Troubleshooting
-
-### SteamVR does not detect the headset
-
-#### Symptoms
-
--
-
-#### Cause
-
--
-
-#### Solution
-
--
-
----
-
-### ALVR connection failure
-
-#### Symptoms
-
--
-
-#### Cause
-
--
-
-#### Solution
-
--
-
----
-
-### Controller not detected
-
-#### Symptoms
-
--
-
-#### Cause
-
--
-
-#### Solution
-
--
-
----
-
-### Incorrect stereo image
-
-Check:
-
-- Left / right eye order
-- Projection matrix
-- Eye transform
-- IPD translation
-- Frustum center
-- Vertical / horizontal sign convention
-
----
-
-### Incorrect HMD motion
-
-Check:
-
-- Position axis convention
-- Rotation matrix convention
-- Matrix multiplication order
-- World-to-camera vs camera-to-world
-- Relative vs absolute pose
-- Prediction timing
-
----
-
-### Incorrect robot motion
-
-Check:
-
-- VR-to-Robot axis mapping
-- Position scaling
-- Rotation scaling
-- Reference pose
-- Position deadzone
-- Rotation deadzone
-- Robot base coordinate
-
----
-
-## 15. Machine-Specific Notes
-
-### Robot Lab Workstation
-
-~~~text
-TODO
-~~~
-
-### Personal / Lab Mac
-
-~~~text
-TODO
-~~~
-
-### Donghyun Environment
-
-~~~text
-TODO
-~~~
-
----
-
-## 16. Known Working Configuration
-
-Once the pipeline becomes stable, record the verified configuration here.
-
-- OS:
-- Python:
-- SteamVR:
-- ALVR:
-- OpenVR:
-- MuJoCo:
-- robosuite:
-- Robot:
-- VR Headset:
-- Verified Date:
-
----
-
-## 17. Setup Checklist
-
-- [ ] Repository cloned
-- [ ] Python environment created
-- [ ] Required packages installed
-- [ ] Quest 2 connected
-- [ ] ALVR connected
-- [ ] SteamVR running
-- [ ] HMD tracking confirmed
-- [ ] Controller tracking confirmed
-- [ ] Simulation running
-- [ ] Robot connection confirmed
-- [ ] VR-to-Robot transformation validated

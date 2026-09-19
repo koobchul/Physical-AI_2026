@@ -1,228 +1,154 @@
 # Research Worklog
 
-Development and experiment log for the Physical-AI_2026 project.
+Development and experiment log for the `Physical-AI_2026` project.
 
-This document records technical progress, experiments, failures, debugging results, and next steps.
+This document tracks overall research progress, technical issues, milestones, and daily experiment records.
 
-For meeting notes, ideas, and general discussion, use the shared Daily Sheet.
+Detailed experiment plans, checklists, observations, and results are maintained in date-specific worklogs.
 
----
-
-# Worklog Template
-
-Use the following structure for new entries.
-
-## 2026-09-17
-
-
-
-### Goal
-
--
-
-### Done
-
--
-
-### Experiment
-
-#### Experiment Name
-
-**Purpose**
-
--
-
-**Setup**
-
--
-
-**Test**
-
--
-
-**Result**
-
--
-
-### Issues
-
--
-
-### Next
-
--
-
-### Notes
-
--
+For meeting notes and general discussions, use the shared Daily Sheet.
 
 ---
 
-# 2026-09-17
+## 1. Current Research Status
 
-## Goal
+### Current Focus
 
-- Organize GitHub collaboration environment
-- Organize VR teleoperation code and documentation
-- Prepare shared development workflow
+VR teleoperation and robot manipulation system development.
 
-## Done
+The September 17–18 diagnostic experiments investigated HMD tracking, stereo rendering, camera transformation, VR distortion, and projection geometry.
 
-- Added VR teleoperation diagnostic scripts
-- Organized repository structure
-- Removed unnecessary macOS `.DS_Store`
-- Added shared documentation structure
-- Prepared GitHub repository for collaboration
+The current main implementation is:
 
-## Experiment
+`code/vr_teleop/main_vr_scene.py`
 
-### VR Teleoperation Diagnostics
+The current system integrates:
 
-**Purpose**
+- Meta Quest 2, ALVR, SteamVR, and OpenVR
+- HMD and VR controller tracking
+- Stereo rendering and camera transformation
+- MuJoCo / robosuite simulation
+- VR-based robot and gripper control in simulation
 
-Validate HMD tracking, stereo rendering, camera transformation, and VR coordinate behavior.
+The final experimental VR configuration has been selected.
 
-**Tested Components**
+The previous diagnostic baseline, `main_vr_scene_7.py`, is preserved for comparison.
 
-- HMD rotation
-- HMD translation
-- 6DoF pose
-- Predicted HMD pose
-- Stereo eye transformation
-- Projection frustum
-- Camera coordinate transformation
-- Left / right eye behavior
+### Open Issues
 
-**Diagnostic Scripts**
+- Validate the stability and accuracy of the final VR configuration.
+- Confirm VR-to-Robot coordinate transformation and control accuracy.
+- Verify robot workspace and safety limits.
+- Establish and validate the real-robot teleoperation pipeline.
+- Prepare demonstration data collection.
 
-- `case_01_headpose_relative_rotation.py`
-- `case_02_projection_frustum_aspect.py`
-- `case_03_symmetric_frustum_center.py`
-- `case_04_same_image_both_eyes.py`
-- `case_05_fresh_hmd_pose.py`
-- `case_06_frustum_width_from_render_aspect.py`
-- `case_07_full_6dof_head_translation.py`
-- `case_08_predicted_hmd_pose_30ms.py`
-- `case_09_static_camera_no_vr_override.py`
-- `case_10_eye_transform_translation_only.py`
-- `case_11_swap_left_right_submit.py`
-- `case_12_zero_ipd_eye_translation.py`
-- `case_13_world_up_lock_no_roll.py`
-- `case_14_flip_frustum_center_sign.py`
-- `case_15_flip_vertical_frustum_sign.py`
+### Next Priorities
 
-## Result
+1. Verify the final VR configuration.
+2. Validate controller tracking and robot control in simulation.
+3. Measure robot dimensions and workspace.
+4. Configure real-robot communication and safety limits.
+5. Prepare VR teleoperation experiments with xArm7.
 
-- TODO
-
-## Issues
-
-- VR camera / HMD transformation requires further validation.
-- Stereo rendering behavior requires further testing.
-- VR coordinate system must be aligned with the robot coordinate system.
-
-## Next
-
-- Stabilize VR rendering
-- Confirm HMD coordinate transformation
-- Confirm VR controller tracking
-- Validate VR-to-Robot coordinate mapping
-- Connect VR control to simulation
-- Prepare xArm7 teleoperation pipeline
-
-## Notes
-
--
+For implementation details, see [VR Teleoperation](../code/vr_teleop/README.md).
 
 ---
 
-# 2026-09-18
+## 2. Worklog Index
 
-## Goal
+Detailed experiment records are organized by date.
 
--
+| Date | Main Topic | Worklog |
+|---|---|---|
+| 2026-09-16 | Initial project setup and documentation | [2026-09-16](worklog/2026-09/2026-09-16.md) |
+| 2026-09-17 | VR teleoperation diagnostics (Cases 01–16) | [2026-09-17](worklog/2026-09/2026-09-17.md) |
+| 2026-09-18 | VR distortion experiments and final configuration investigation | [2026-09-18](worklog/2026-09/2026-09-18.md) |
 
-## Done
-
--
-
-## Experiment
-
-### Experiment Name
-
-**Purpose**
-
--
-
-**Setup**
-
--
-
-**Test**
-
--
-
-**Result**
-
--
-
-## Issues
-
--
-
-## Next
-
--
-
-## Notes
-
--
+Add new daily worklogs to this index as research progresses.
 
 ---
 
-# Important Milestones
+## 3. Important Milestones
 
-## VR Tracking
+Mark an item as completed only after the corresponding functionality has been implemented and validated.
 
-- [ ] Stable HMD position tracking
-- [ ] Stable HMD rotation tracking
-- [ ] Stable controller tracking
-- [ ] Correct stereo rendering
-- [ ] Correct projection / frustum
+### VR Tracking & Rendering
 
-## VR Teleoperation
+- [ ] Stable HMD position and rotation tracking
+- [ ] Stable VR controller tracking
+- [ ] Stereo rendering and projection validated
+- [ ] Final VR configuration validated
 
-- [ ] VR coordinate system validated
-- [ ] Robot coordinate system validated
-- [ ] VR → Robot transformation validated
-- [ ] End-effector position control
-- [ ] End-effector orientation control
-- [ ] Gripper control
+### VR Teleoperation & Simulation
 
-## Simulation
-
-- [ ] Robot model loaded
-- [ ] VR input connected to simulation
-- [ ] Manipulation task tested
+- [ ] VR-to-Robot coordinate transformation validated
+- [ ] End-effector position and orientation control validated
+- [ ] Gripper control validated
+- [ ] Robot manipulation task tested
 - [ ] Demonstration recording enabled
 
-## Real Robot
+### Real Robot
 
 - [ ] xArm7 communication verified
-- [ ] Safety limits configured
+- [ ] Robot workspace and safety limits configured
 - [ ] Basic Cartesian control tested
 - [ ] VR teleoperation tested
 - [ ] Demonstration data collection tested
 
-## Robot Learning
+### Robot Learning
 
-- [ ] Demonstration format defined
-- [ ] Dataset pipeline defined
-- [ ] Imitation Learning baseline
-- [ ] Policy evaluation
-- [ ] Sim-to-Real evaluation
-- [ ] VLA integration
+- [ ] Demonstration format and dataset pipeline defined
+- [ ] Imitation Learning baseline implemented
+- [ ] Robot policy evaluated
+- [ ] Sim-to-Real evaluation performed
+- [ ] VLA integration tested
 
+---
 
-- python case_32_both_eyes.py --fov-scale-x 0.5
-- final case 
+## 4. Documentation Guidelines
+
+### Daily Worklog
+
+Create a new Markdown file for each research day.
+
+```text
+docs/worklog/YYYY-MM/YYYY-MM-DD.md
+```
+
+Each daily worklog should contain:
+
+- Goal
+- Done
+- Experiment (Purpose, Setup, Test, Result)
+- Issues
+- Next
+- Notes
+
+Record detailed Case checklists, observations, and results in the corresponding daily worklog.
+
+### Experiment Code
+
+Store diagnostic scripts in:
+
+```text
+code/vr_teleop/cases/YYYY-MM-DD/
+```
+
+Use the naming convention:
+
+`case_XX_short_description.py`
+
+Each experiment should identify its reference implementation and document the modified variables.
+
+### Documentation Rules
+
+| Document | Purpose |
+|---|---|
+| [README.md](../README.md) | Project overview and research direction |
+| [VR Teleoperation README](../code/vr_teleop/README.md) | Code structure, execution, and experiment rules |
+| [SETUP.md](SETUP.md) | Hardware and software environment setup |
+| `docs/WORKLOG.md` | Overall research progress and milestones |
+| `docs/worklog/YYYY-MM/YYYY-MM-DD.md` | Detailed daily experiment records |
+| Shared Daily Sheet | Meeting notes, ideas, and general discussions |
+
+---
