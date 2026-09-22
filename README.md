@@ -139,7 +139,7 @@ Physical-AI_2026/
 
 | Document | Description |
 |---|---|
-| [VR Teleoperation](code/vr_teleop/README.md) | Implementation, execution, and diagnostic experiments |
+| [VR Teleoperation](code/README.md) | Implementation, execution, and diagnostic experiments |
 | [Setup Guide](docs/SETUP.md) | Hardware and software environment setup |
 | [Research Worklog](docs/WORKLOG.md) | Research progress, milestones, and daily records |
 | [Robot Vendor Notes](docs/Robot_Vendor_Notes.md) | Robot operation, configuration, and safety notes |
